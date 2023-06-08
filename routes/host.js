@@ -51,4 +51,18 @@ router.post('/create', async (req, res) => {
     res.json(result);
 });
 
+// login a host using email or phone number
+router.post('/login', async (req, res) => {
+    const host = req.body;
+
+    // check if email or phone number is matched
+    const result = await hostCollection.findOne({ $or: [{ email: host.emailOrPhone }, { phone: host.emailOrPhone }] });
+    if (result) {
+        res.json(result);
+    }
+    else {
+        res.json({ message: "No host found" });
+    }
+});
+
 module.exports = router;
