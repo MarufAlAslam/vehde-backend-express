@@ -38,6 +38,7 @@ router.get('/', async (req, res, next) => {
 
 // load host collection from mongodb
 const hostCollection = client.db("vehde").collection("host");
+const carListingCollection = client.db("vehde").collection("carListing");
 
 // GET all hosts
 router.get('/all', async (req, res) => {
@@ -63,6 +64,19 @@ router.post('/login', async (req, res) => {
     else {
         res.json({ message: "No host found" });
     }
+});
+
+// create car listing
+router.post('/listing', async (req, res) => {
+    const listing = req.body;
+    const result = await carListingCollection.insertOne(listing);
+    res.json(result);
+})
+
+// get all car listings
+router.get('/listing', async (req, res) => {
+    const listings = await carListingCollection.find({}).toArray();
+    res.status(200).json(listings);
 });
 
 module.exports = router;
