@@ -83,6 +83,13 @@ router.get("/listing", async (req, res) => {
   res.status(200).json(listings);
 });
 
+// get car by id
+router.get("/listing/:id", async (req, res) => {
+  const id = req.params.id;
+  const listing = await carListingCollection.findOne({ _id: new ObjectId(id) });
+  res.status(200).json(listing);
+});
+
 // delete a car from listing
 router.delete("/listing", async (req, res) => {
   const id = req.body.id;
