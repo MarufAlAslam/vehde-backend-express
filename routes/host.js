@@ -93,10 +93,27 @@ router.get("/listing/:id", async (req, res) => {
 // delete a car from listing
 router.delete("/listing", async (req, res) => {
   const id = req.body.id;
- 
-//   delete the car from listing
-const result = await carListingCollection.deleteOne({ _id: new ObjectId(id) });
-res.json(result);
+
+  //   delete the car from listing
+  const result = await carListingCollection.deleteOne({ _id: new ObjectId(id) });
+  res.json(result);
+});
+
+// filter cars from listing using location
+router.get("/listing/location/:location", async (req, res) => {
+  // convert location to lowercase
+  const city = req.params.location.toLowerCase();
+
+  // find all cars from listing
+  const listings = await carListingCollection.find({}).toArray();
+
+  // filter cars by location
+  const filteredListings = listings.filter(
+    (listing) => listing.city.toLowerCase() === city
+  );
+  
+
+  res.status(200).json(filteredListings);
 });
 
 module.exports = router;
